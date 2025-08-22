@@ -1,0 +1,303 @@
+import React, {useEffect, useState} from "react";
+
+/**
+ * Idea Jam #3 — One-page landing (English)
+ * Styling: Tailwind (auto-available). Drop your logo at /public/logo.png to replace the placeholder mark.
+ * CTAs: replace hrefs with your real Typeform/RSVP links.
+ */
+
+const brand = {
+  purple: "#5D2E7C",
+  plum: "#752055",
+  orange: "#F5A623",
+  gold: "#F0BA3C",
+};
+
+function Nav() {
+  return (
+    <header className="fixed top-0 inset-x-0 z-50 backdrop-blur bg-white/60 border-b border-black/5">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center justify-between">
+        <a href="#" className="flex items-center gap-2">
+          {/* Logo placeholder — replace /logo.png when available */}
+          <div className="w-8 h-8 rounded-full" style={{background: `conic-gradient(from_45deg, ${brand.purple}, ${brand.orange})`}} />
+          <span className="font-semibold tracking-tight text-slate-800">Idea Jam</span>
+          <span className="text-slate-400">#3</span>
+        </a>
+        <nav className="hidden md:flex items-center gap-6 text-sm text-slate-700">
+          <a href="#apply" className="hover:text-slate-900">Apply</a>
+          <a href="#dates" className="hover:text-slate-900">Key dates</a>
+          <a href="#eligibility" className="hover:text-slate-900">Eligibility</a>
+          <a href="#process" className="hover:text-slate-900">Process</a>
+          <a href="#criteria" className="hover:text-slate-900">Judging</a>
+          <a href="#rsvp" className="hover:text-slate-900">Final RSVP</a>
+        </nav>
+        <div className="flex items-center gap-2">
+          <a target="_blank" href="https://form.typeform.com/to/Sbs465Mw" className="hidden sm:inline-flex px-4 py-2 rounded-full text-white shadow" style={{background: brand.purple}}>Apply now</a>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function Countdown({ targetISO }: { targetISO: string }) {
+  const [t, setT] = useState({d:0,h:0,m:0,s:0});
+  useEffect(()=>{
+    const id = setInterval(()=>{
+      const target = new Date(targetISO).getTime();
+      const now = Date.now();
+      const diff = Math.max(0, target - now);
+      const d = Math.floor(diff/86400000);
+      const h = Math.floor((diff%86400000)/3600000);
+      const m = Math.floor((diff%3600000)/60000);
+      const s = Math.floor((diff%60000)/1000);
+      setT({d,h,m,s});
+    }, 1000);
+    return ()=> clearInterval(id);
+  }, [targetISO]);
+  return (
+    <div className="mt-6 grid grid-cols-4 gap-2 w-full max-w-xs text-center">
+      {Object.entries(t).map(([k,v])=> (
+        <div key={k} className="rounded-xl bg-white/10 backdrop-blur text-white/90 py-2">
+          <div className="text-xl font-bold">{v.toString().padStart(2,'0')}</div>
+          <div className="text-[11px] uppercase tracking-wide">{k}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Hero() {
+  return (
+    <section className="relative pt-28 overflow-hidden" style={{background:`linear-gradient(100deg, ${brand.purple}, ${brand.orange})`}}>
+      <div className="absolute inset-0 opacity-10" style={{background:"radial-gradient(60% 60% at 10% 10%, white, transparent)", mixBlendMode:"overlay"}}/>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-20 text-white">
+        <div className="max-w-3xl">
+          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">
+            Idea Jam #3 — Road to AfricArena Cape Town
+          </h1>
+          <p className="mt-4 text-lg opacity-90">
+            We’re selecting <b>5 startups</b> to join AfricArena in Cape Town. English pitches. Real traction. Global exposure.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a target="_blank" href="https://form.typeform.com/to/Sbs465Mw" className="px-5 py-3 rounded-full bg-white text-slate-900 font-semibold shadow hover:opacity-95">Apply now</a>
+            <a target="_blank"  href="#rsvp" className="px-5 py-3 rounded-full border border-white/60 text-white hover:bg-white/10">Attend the Final</a>
+          </div>
+          <div className="mt-6 text-sm/relaxed opacity-90">
+            <p>Call for applications: <b>Aug 22 → Sep 2</b> · Pre‑Jam: <b>Thu Sep 4</b> · Final: <b>Wed Sep 17</b> at Sama Hotel (Almadies, Dakar)</p>
+          </div>
+          <Countdown targetISO="2025-09-02T23:59:59Z" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Section({id, kicker, title, children}:{id:string; kicker:string; title:string; children:React.ReactNode}){
+  return (
+    <section id={id} className="py-16 border-b border-slate-100">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="max-w-3xl">
+          <div className="text-xs uppercase tracking-wider text-slate-500">{kicker}</div>
+          <h2 className="text-2xl sm:text-3xl font-bold mt-2 text-slate-900">{title}</h2>
+        </div>
+        <div className="mt-6">{children}</div>
+      </div>
+    </section>
+  )
+}
+
+function Pill({children}:{children:React.ReactNode}){
+  return <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 mr-2 mb-2">{children}</span>
+}
+
+function Apply() {
+  return (
+    <Section id="apply" kicker="Call for applications" title="Who can apply & what to submit (English)">
+      <div className="grid md:grid-cols-2 gap-10">
+        <div>
+          <h3 className="font-semibold text-slate-900">Eligibility</h3>
+          <ul className="mt-3 space-y-2 text-slate-700">
+            <li>• Startups from <b>MVP stage</b></li>
+            <li>• Any sector (no exclusions)</li>
+            <li>• Traction required (revenue, users, POC or pilots)</li>
+          </ul>
+          <div className="mt-4">
+            <Pill>English decks</Pill>
+            <Pill>PDF only</Pill>
+            <Pill>10–12 slides</Pill>
+          </div>
+        </div>
+        <div>
+          <h3 className="font-semibold text-slate-900">Your submission</h3>
+          <ol className="mt-3 list-decimal pl-5 space-y-2 text-slate-700">
+            <li>150‑word pitch (problem, solution, market fit)</li>
+            <li>Pitch deck (PDF, 10–12 slides) — file name: <code>StartupName_IdeaJam2025.pdf</code></li>
+            <li>Links (demo, website), team bios, KPIs/traction, GTM, roadmap, ask</li>
+          </ol>
+          <a target="_blank"  href="https://form.typeform.com/to/Sbs465Mw" target="_blank" className="mt-5 inline-flex px-5 py-3 rounded-lg text-white font-semibold shadow" style={{background: brand.purple}}>Open application form</a>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+function Dates() {
+  return (
+    <Section id="dates" kicker="Timeline" title="Key dates (Africa/Dakar)">
+      <div className="grid md:grid-cols-3 gap-6">
+        {[{
+          title:"Applications",
+          date:"Aug 22 → Sep 2",
+          desc:"Online form (EN) + deck upload"
+        },{
+          title:"Pre‑Jam (in person)",
+          date:"Thu Sep 4",
+          desc:"3’ pitch + 3’ Q&A before jury"
+        },{
+          title:"Final",
+          date:"Wed Sep 17 · Sama Hotel, Almadies",
+          desc:"7 finalists · keynote/panel · awards"
+        }].map((e,i)=> (
+          <div key={i} className="rounded-2xl border p-5 bg-white shadow-sm">
+            <div className="text-xs uppercase tracking-wider text-slate-500">{e.title}</div>
+            <div className="mt-1 font-semibold text-slate-900">{e.date}</div>
+            <p className="mt-2 text-slate-700 text-sm">{e.desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+  )
+}
+
+function Process() {
+  return (
+    <Section id="process" kicker="How it works" title="Selection process">
+      <ol className="grid md:grid-cols-3 gap-6">
+        <li className="rounded-2xl border p-5 bg-white shadow-sm">
+          <div className="font-semibold">1) Screening</div>
+          <p className="mt-1 text-sm text-slate-700">We pre‑select up to <b>10</b> startups for the Pre‑Jam.
+          </p>
+        </li>
+        <li className="rounded-2xl border p-5 bg-white shadow-sm">
+          <div className="font-semibold">2) Pre‑Jam</div>
+          <p className="mt-1 text-sm text-slate-700">3’ pitch + 3’ Q&A on <b>Thu Sep 4</b> → <b>Top 4</b> qualify.
+          </p>
+        </li>
+        <li className="rounded-2xl border p-5 bg-white shadow-sm">
+          <div className="font-semibold">3) Final</div>
+          <p className="mt-1 text-sm text-slate-700"><b>7 finalists</b> (4 from Pre‑Jam + 3 top Yokkuté) pitch in English. Awards: <b>Top 5</b> to AfricArena + “Coup de cœur” & “Impact”.</p>
+        </li>
+      </ol>
+    </Section>
+  )
+}
+
+function Criteria() {
+  const items = [
+    {label:"Problem", pct:15},
+    {label:"Solution", pct:15},
+    {label:"Market", pct:15},
+    {label:"Traction", pct:20},
+    {label:"Business Model", pct:15},
+    {label:"Team", pct:10},
+    {label:"Fit AfricArena", pct:10},
+  ];
+  return (
+    <Section id="criteria" kicker="Judging" title="Evaluation criteria & weights">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {items.map((i)=> (
+          <div key={i.label} className="rounded-xl border p-4 bg-white">
+            <div className="flex items-baseline justify-between">
+              <div className="font-semibold text-slate-900">{i.label}</div>
+              <div className="text-sm text-slate-500">{i.pct}%</div>
+            </div>
+            <div className="mt-2 h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+              <div className="h-full" style={{width:`${i.pct}%`, background: `linear-gradient(90deg, ${brand.purple}, ${brand.orange})`}} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+  )
+}
+
+function RSVP() {
+  return (
+    <Section id="rsvp" kicker="Attend the final" title="Final · Wed Sep 17 · Sama Hotel (Almadies, Dakar)">
+      <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <p className="text-slate-700">Join investors, mentors, partners and press for the final: 7 English pitches, keynote/panel, awards and networking.</p>
+          <div className="mt-5 flex gap-3">
+            <a href="https://forms.gle/your-rsvp" target="_blank" className="px-5 py-3 rounded-lg text-white font-semibold shadow" style={{background: brand.orange}}>RSVP to attend</a>
+            <a href="#apply" className="px-5 py-3 rounded-lg border border-slate-200">Apply instead</a>
+          </div>
+        </div>
+        <div className="rounded-2xl border p-6 bg-gradient-to-br from-white to-slate-50 shadow-sm">
+          <div className="text-xs uppercase tracking-wider text-slate-500">At a glance</div>
+          <ul className="mt-3 text-sm text-slate-700 space-y-2">
+            <li>• Language: English (pitches & decks)</li>
+            <li>• Format: 3’ pitch + 3’ Q&A</li>
+            <li>• Audience: investors, mentors, partners, press</li>
+            <li>• Awards: Top 5 to AfricArena + special mentions</li>
+          </ul>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+function Partners() {
+  return (
+    <section className="py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="text-center text-sm uppercase tracking-wider text-slate-500">Sponsored by</div>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-10 opacity-80">
+          <div className="h-10 w-28 rounded bg-slate-200 flex items-center justify-center text-slate-600 text-xs">KOICA</div>
+          <div className="h-10 w-40 rounded bg-slate-200 flex items-center justify-center text-slate-600 text-xs">KPC Consortium</div>
+          <div className="h-10 w-36 rounded bg-slate-200 flex items-center justify-center text-slate-600 text-xs">Partners</div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Footer() {
+  return (
+    <footer className="py-12 bg-slate-950 text-slate-200">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="grid sm:grid-cols-2 gap-8">
+          <div>
+            <div className="text-sm uppercase tracking-wider text-slate-400">Contact</div>
+            <p className="mt-2 text-sm">Questions? Email <a className="underline" href="mailto:contact@kpcconsortiumsenegal.com">contact@kpcconsortiumsenegal.com</a></p>
+            <p className="mt-1 text-xs text-slate-400">By applying, you consent to data processing for selection & communications and to image/audio/video capture for non-commercial Idea Jam/AfricArena coverage.</p>
+          </div>
+          <div>
+            <div className="text-sm uppercase tracking-wider text-slate-400">Key links</div>
+            <ul className="mt-2 text-sm space-y-1">
+              <li><a className="hover:underline" href="#apply">Application form</a></li>
+              <li><a className="hover:underline" href="#rsvp">RSVP to Final</a></li>
+              <li><a className="hover:underline" href="#criteria">Judging criteria</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="mt-10 text-xs text-slate-500">© {new Date().getFullYear()} KOICA & KPC Consortium — Idea Jam #3</div>
+      </div>
+    </footer>
+  )
+}
+
+export default function IdeaJamLanding() {
+  return (
+    <main className="bg-white text-slate-900">
+      <Nav/>
+      <Hero/>
+      <Apply/>
+      <Dates/>
+      <Process/>
+      <Criteria/>
+      <RSVP/>
+      <Partners/>
+      <Footer/>
+    </main>
+  );
+}
